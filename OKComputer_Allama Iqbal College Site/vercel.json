@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "aims-college-website",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
