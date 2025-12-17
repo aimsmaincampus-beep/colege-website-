@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements & Success Stories - Allama Iqbal Model School & College</title>
+    <meta name="description"
+        content="Explore our achievements, awards, success stories, and the remarkable accomplishments of our students and faculty.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-gold: #fbbf24;
+            --accent-cyan: #06b6d4;
+            --dark-navy: #0f172a;
+            --light-gray: #f1f5f9;
+            --text-gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Glass Morphism */
+        .glass {
+            background: rgba(30, 58, 138, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        /* Cards */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(251, 191, 36, 0.3);
+            border-color: var(--secondary-gold);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.6);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--secondary-gold);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-10 h-10 rounded-full">
+                    <span class="font-display text-xl font-bold text-white">AIMS College</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                    <a href="campuses.html"
+                        class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Campuses</a>
+                    <a href="academics.html"
+                        class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                    <a href="student-life.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Student
+                        Life</a>
+                    <a href="achievements.html" class="nav-link text-yellow-400 font-medium">Achievements</a>
+                    <a href="contact.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                    <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold">Student Portal</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-16 right-0 w-64 h-screen bg-gray-900 md:hidden">
+            <div class="p-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                <a href="campuses.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Campuses</a>
+                <a href="academics.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                <a href="student-life.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Student
+                    Life</a>
+                <a href="achievements.html" class="block text-yellow-400 font-medium">Achievements</a>
+                <a href="contact.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold w-full mt-4">Student
+                    Portal</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1
+                class="font-display text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
+                Achievements & Success Stories
+            </h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+                Celebrating excellence in academics, sports, arts, and community service. Our students consistently
+                achieve remarkable success at national and international levels.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button class="btn-primary px-6 py-3 rounded-full font-bold">View All Achievements</button>
+                <button class="btn-secondary px-6 py-3 rounded-full font-bold text-yellow-400 bg-transparent">Success
+                    Stories</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievement Statistics -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass rounded-3xl p-8 md:p-12">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="space-y-2">
+                        <div class="text-4xl md:text-6xl font-black text-yellow-400">150+</div>
+                        <div class="text-gray-300 text-lg font-medium">🏆 International Medals</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-4xl md:text-6xl font-black text-yellow-400">250+</div>
+                        <div class="text-gray-300 text-lg font-medium">🏅 National Awards</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-4xl md:text-6xl font-black text-yellow-400">95%</div>
+                        <div class="text-gray-300 text-lg font-medium">🎓 University Admission</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-4xl md:text-6xl font-black text-yellow-400">500+</div>
+                        <div class="text-gray-300 text-lg font-medium">📊 Research Publications</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Major Achievements -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-yellow-400">
+                    Major Achievements 2024
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Historic milestones that define our commitment to excellence in education and student development.
+                </p>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Achievement 1 - Featured -->
+                <div class="glass rounded-3xl p-8 lg:p-12">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="text-6xl">🥇</div>
+                                <div>
+                                    <h3 class="text-3xl font-bold text-yellow-400">First Gold Medal in International
+                                        Biology Olympiad</h3>
+                                    <p class="text-gray-400 text-lg">Historic Achievement for Pakistan</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 text-lg mb-6">
+                                Abdul Raffay Paracha, a student of AIMS College, made history by winning Pakistan's
+                                first-ever gold medal at the 35th International Biology Olympiad held in Philippines.
+                                This remarkable achievement marks a significant milestone in Pakistan's participation in
+                                international academic competitions.
+                            </p>
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <span class="px-4 py-2 bg-yellow-500 text-gray-900 rounded-full font-bold">Gold
+                                    Medal</span>
+                                <span class="px-4 py-2 bg-blue-600 text-white rounded-full">International</span>
+                                <span class="px-4 py-2 bg-green-600 text-white rounded-full">Biology Olympiad</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <div class="text-2xl font-bold text-yellow-400">1st</div>
+                                    <div class="text-gray-400 text-sm">Pakistan Gold</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-yellow-400">68</div>
+                                    <div class="text-gray-400 text-sm">Countries</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-yellow-400">July</div>
+                                    <div class="text-gray-400 text-sm">2024</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass rounded-2xl p-8">
+                            <h4 class="text-2xl font-bold text-yellow-400 mb-4">Student Profile</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Name:</span>
+                                    <span class="text-white font-bold">Abdul Raffay Paracha</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Campus:</span>
+                                    <span class="text-white font-bold">Main Campus</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Grade:</span>
+                                    <span class="text-white font-bold">12th (Pre-Medical)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Achievement:</span>
+                                    <span class="text-yellow-400 font-bold">Gold Medal</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Location:</span>
+                                    <span class="text-white font-bold">Philippines</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-blue-900 rounded-lg">
+                                <p class="text-gray-300 text-sm">
+                                    "This achievement is not just mine, but belongs to my school, my teachers, and my
+                                    country. AIMS College provided me with the perfect environment to excel."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="glass rounded-3xl p-8">
+                    <div class="flex items-center space-x-6 mb-6">
+                        <div class="text-5xl">🏆</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-yellow-400">National Debate Championship</h3>
+                            <p class="text-gray-400">Inter-School Competition 2024</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <p class="text-gray-300 text-lg mb-4">
+                                Our debate team emerged victorious in the national championship, defeating over 50
+                                schools from across Pakistan. The competition tested oratory skills, critical thinking,
+                                and diplomatic abilities in various challenging scenarios.
+                            </p>
+                            <div class="flex flex-wrap gap-3 mb-4">
+                                <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">1st Place
+                                    National</span>
+                                <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">50+ Schools</span>
+                                <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Team Event</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-yellow-400">5</div>
+                                <div class="text-gray-400">Team Members</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-yellow-400">12</div>
+                                <div class="text-gray-400">Rounds Won</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-yellow-400">100%</div>
+                                <div class="text-gray-400">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 3 -->
+                <div class="glass rounded-3xl p-8">
+                    <div class="flex items-center space-x-6 mb-6">
+                        <div class="text-5xl">🎓</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-yellow-400">University Admission Success</h3>
+                            <p class="text-gray-400">Class of 2024 University Placements</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-lg mb-6">
+                        An impressive 95% of our graduating class secured admission to top universities, with many
+                        receiving scholarships and merit-based admissions to prestigious institutions including LUMS,
+                        NUST, GIKI, and international universities.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">45</div>
+                            <div class="text-gray-400">LUMS</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">38</div>
+                            <div class="text-gray-400">NUST</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">32</div>
+                            <div class="text-gray-400">GIKI</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">28</div>
+                            <div class="text-gray-400">International</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 4 - Shergarh Campus -->
+                <div class="glass rounded-3xl p-8">
+                    <div class="flex items-center space-x-6 mb-6">
+                        <div class="text-5xl">📈</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-yellow-400">Shergarh Campus Excellence</h3>
+                            <p class="text-gray-400">AIMS College Shergarh FCS Campus</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-lg mb-6">
+                        AIMS College Shergarh FCS Campus has achieved remarkable excellence with 575 students, 51
+                        faculty members, and an outstanding 98% pass rate. The campus features comprehensive facilities
+                        including computer labs, science labs, library, and sports facilities.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">575</div>
+                            <div class="text-gray-400">Students</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">51</div>
+                            <div class="text-gray-400">Faculty</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">98%</div>
+                            <div class="text-gray-400">Pass Rate</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-400">2009</div>
+                            <div class="text-gray-400">Established</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-green-900 rounded-lg">
+                        <p class="text-gray-300 text-sm">
+                            "Our campus has improved social media presence, enhanced overall system, and better campus
+                            image attracting new students. We provide quality education with modern facilities and
+                            experienced faculty."
+                        </p>
+                        <p class="text-yellow-400 text-sm mt-2 font-bold">- Mr. Khurshid Anwar, Principal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievement Categories -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-yellow-400">
+                    Achievement Categories
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Excellence across diverse fields of academics, sports, arts, and community service.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Academic Achievements -->
+                <div class="card-hover glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">📚</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Academic Excellence</h3>
+                    <p class="text-gray-300 mb-6">Outstanding performance in board examinations, Olympiads, and academic
+                        competitions.</p>
+                    <div class="space-y-2 text-gray-400">
+                        <p>• Board Results: 98% A+ Grade</p>
+                        <p>• Olympiad Medals: 25+</p>
+                        <p>• Research Publications: 50+</p>
+                        <p>• Scholarships: PKR 10M+</p>
+                    </div>
+                </div>
+
+                <!-- Sports Achievements -->
+                <div class="card-hover glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">⚽</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Sports Excellence</h3>
+                    <p class="text-gray-300 mb-6">Championship victories in cricket, football, badminton, and athletics
+                        at regional and national levels.</p>
+                    <div class="space-y-2 text-gray-400">
+                        <p>• Regional Championships: 15</p>
+                        <p>• National Participation: 8 Teams</p>
+                        <p>• Individual Records: 25+</p>
+                        <p>• Sports Scholarships: 12</p>
+                    </div>
+                </div>
+
+                <!-- Arts Achievements -->
+                <div class="card-hover glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Arts & Culture</h3>
+                    <p class="text-gray-300 mb-6">Creative excellence in visual arts, literature, drama, and cultural
+                        competitions.</p>
+                    <div class="space-y-2 text-gray-400">
+                        <p>• Art Exhibitions: 20+</p>
+                        <p>• Literary Awards: 30+</p>
+                        <p>• Drama Performances: 15</p>
+                        <p>• Cultural Events: 25+</p>
+                    </div>
+                </div>
+
+                <!-- Technology Achievements -->
+                <div class="card-hover glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">💻</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Technology & Innovation</h3>
+                    <p class="text-gray-300 mb-6">Innovation in programming, robotics, and digital creation with
+                        multiple hackathon victories.</p>
+                    <div class="space-y-2 text-gray-400">
+                        <p>• Hackathon Wins: 8</p>
+                        <p>• App Development: 15 Apps</p>
+                        <p>• Robotics Competitions: 12</p>
+                        <p>• Coding Awards: 20+</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories Timeline -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-yellow-400">
+                    Success Stories
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Inspiring journeys of our students who have achieved remarkable success in their academic and
+                    professional careers.
+                </p>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Success Story 1 -->
+                <div class="glass rounded-2xl p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                        <div class="text-center">
+                            <div
+                                class="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                                👨‍⚕️
+                            </div>
+                            <h3 class="text-xl font-bold text-yellow-400">Dr. Ayesha Khan</h3>
+                            <p class="text-gray-400">Batch of 2019</p>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <h4 class="text-2xl font-bold text-white mb-4">From AIMS to Harvard Medical School</h4>
+                            <p class="text-gray-300 text-lg mb-4">
+                                Ayesha's journey from AIMS College to Harvard Medical School is a testament to our
+                                commitment to excellence. She credits her success to the strong foundation in sciences
+                                and the research opportunities provided at AIMS.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">Harvard
+                                    Medical</span>
+                                <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Scholarship</span>
+                                <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">Research
+                                    Excellence</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Story 2 -->
+                <div class="glass rounded-2xl p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                        <div class="text-center">
+                            <div
+                                class="w-24 h-24 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                                👨‍💻
+                            </div>
+                            <h3 class="text-xl font-bold text-yellow-400">Ahmed Hassan</h3>
+                            <p class="text-gray-400">Batch of 2020</p>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <h4 class="text-2xl font-bold text-white mb-4">Tech Entrepreneur & LUMS Graduate</h4>
+                            <p class="text-gray-300 text-lg mb-4">
+                                Ahmed founded his own tech startup while studying at LUMS, developing innovative
+                                solutions for education. His entrepreneurial journey began at AIMS with the programming
+                                club.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">LUMS Graduate</span>
+                                <span class="px-3 py-1 bg-yellow-600 text-white text-sm rounded-full">Tech
+                                    Entrepreneur</span>
+                                <span class="px-3 py-1 bg-indigo-600 text-white text-sm rounded-full">Startup
+                                    Founder</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Story 3 -->
+                <div class="glass rounded-2xl p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                        <div class="text-center">
+                            <div
+                                class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                                👩‍🔬
+                            </div>
+                            <h3 class="text-xl font-bold text-yellow-400">Fatima Shah</h3>
+                            <p class="text-gray-400">Batch of 2021</p>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <h4 class="text-2xl font-bold text-white mb-4">Research Scientist at Oxford</h4>
+                            <p class="text-gray-300 text-lg mb-4">
+                                Fatima's passion for research, nurtured at AIMS through science Olympiads, led her to
+                                pursue advanced studies at Oxford University, where she's now conducting groundbreaking
+                                research in biotechnology.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 bg-blue-800 text-white text-sm rounded-full">Oxford
+                                    University</span>
+                                <span class="px-3 py-1 bg-green-700 text-white text-sm rounded-full">Research
+                                    Scientist</span>
+                                <span
+                                    class="px-3 py-1 bg-purple-700 text-white text-sm rounded-full">Biotechnology</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass rounded-3xl p-12">
+                <h2
+                    class="font-display text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
+                    Write Your Success Story
+                </h2>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                    Join thousands of successful students who have achieved their dreams with AIMS College. Your success
+                    story starts here.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                        Start Your Journey →
+                    </button>
+                    <button
+                        class="btn-secondary px-8 py-4 rounded-full text-lg font-bold text-yellow-400 bg-transparent">
+                        Meet Our Alumni 👥
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-3">
+                        <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-12 h-12 rounded-full">
+                        <span class="font-display text-2xl font-bold text-white">AIMS College</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Allama Iqbal Model School & College is committed to providing world-class education grounded in
+                        Islamic values and modern innovation.
+                    </p>
+                    <div class="flex space-x-4">
+                        <div
+                            class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
+                            📘</div>
+                        <div
+                            class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-pink-700 transition-colors">
+                            📸</div>
+                        <div
+                            class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-500 transition-colors">
+                            🐦</div>
+                        <div
+                            class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">
+                            ▶️</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Quick Links</h3>
+                    <div class="space-y-2">
+                        <a href="index.html"
+                            class="block text-gray-400 hover:text-yellow-400 transition-colors">Home</a>
+                        <a href="campuses.html"
+                            class="block text-gray-400 hover:text-yellow-400 transition-colors">Campuses</a>
+                        <a href="academics.html"
+                            class="block text-gray-400 hover:text-yellow-400 transition-colors">Academics</a>
+                        <a href="contact.html"
+                            class="block text-gray-400 hover:text-yellow-400 transition-colors">Contact</a>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Achievements</h3>
+                    <div class="space-y-2">
+                        <a href="#academic" class="block text-gray-400 hover:text-yellow-400 transition-colors">Academic
+                            Excellence</a>
+                        <a href="#sports" class="block text-gray-400 hover:text-yellow-400 transition-colors">Sports
+                            Achievements</a>
+                        <a href="#arts" class="block text-gray-400 hover:text-yellow-400 transition-colors">Arts &
+                            Culture</a>
+                        <a href="#technology"
+                            class="block text-gray-400 hover:text-yellow-400 transition-colors">Technology</a>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p>📍 Main Campus, Sakhakot<br>Malakand District, KPK</p>
+                        <p>📞 +92 945 763441</p>
+                        <p>✉️ info@aimscsakhakot.edu.pk</p>
+                        <p>🌐 www.aimscsakhakot.edu.pk</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Allama Iqbal Model School & College. All rights reserved. | Designed with ❤️ for
+                    Excellence</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

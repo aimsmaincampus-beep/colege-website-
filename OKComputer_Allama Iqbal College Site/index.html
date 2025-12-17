@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allama Iqbal Model School & College - Excellence in Education</title>
+    <meta name="description" content="Premier educational institution in Malakand with 7 campuses, 5000+ students, and world-class programs. Building future leaders since 1995.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-gold: #fbbf24;
+            --accent-cyan: #06b6d4;
+            --dark-navy: #0f172a;
+            --light-gray: #f1f5f9;
+            --text-gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Particle Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* Navigation */
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(30, 27, 75, 0.8)), url('resources/hero-main-campus.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .hero-title {
+            background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(30, 58, 138, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        /* Cards */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(251, 191, 36, 0.3);
+            border-color: var(--secondary-gold);
+        }
+        
+        /* Statistics Counter */
+        .stat-number {
+            background: linear-gradient(135deg, #fbbf24 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.6);
+        }
+        
+        .btn-secondary {
+            border: 2px solid var(--secondary-gold);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(15px); }
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-10 h-10 rounded-full">
+                    <span class="font-display text-xl font-bold text-white">AIMS College</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                    <a href="campuses.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Campuses</a>
+                    <a href="academics.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                    <a href="student-life.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Student Life</a>
+                    <a href="achievements.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Achievements</a>
+                    <a href="contact.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                    <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold">Student Portal</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-16 right-0 w-64 h-screen bg-gray-900 md:hidden">
+            <div class="p-6 space-y-4">
+                <a href="#home" class="block text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                <a href="campuses.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Campuses</a>
+                <a href="academics.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                <a href="student-life.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Student Life</a>
+                <a href="achievements.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Achievements</a>
+                <a href="contact.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold w-full mt-4">Student Portal</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+            <div class="space-y-8">
+                <h1 class="hero-title font-display text-5xl md:text-7xl font-black leading-tight">
+                    ALLAMA IQBAL MODEL SCHOOL & COLLEGE
+                </h1>
+                <h2 class="text-2xl md:text-4xl text-gray-300 font-light">
+                    Excellence in Education Since 1995
+                </h2>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                    Building Future Leaders in Malakand • 7 Campuses • World-Class Education • Islamic Values
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
+                    <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                        Apply Now →
+                    </button>
+                    <button class="btn-secondary px-8 py-4 rounded-full text-lg font-bold text-yellow-400 bg-transparent">
+                        Virtual Tour 🎥
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <div class="w-6 h-10 border-2 border-yellow-400 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-yellow-400 rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Statistics Section -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass rounded-3xl p-8 md:p-12">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="space-y-2">
+                        <div class="stat-number text-4xl md:text-6xl font-black" data-target="5000">0</div>
+                        <div class="text-gray-300 text-lg font-medium">📚 Students</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="stat-number text-4xl md:text-6xl font-black" data-target="200">0</div>
+                        <div class="text-gray-300 text-lg font-medium">👨‍🏫 Faculty</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="stat-number text-4xl md:text-6xl font-black" data-target="8">0</div>
+                        <div class="text-gray-300 text-lg font-medium">🏫 Campuses</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="stat-number text-4xl md:text-6xl font-black" data-target="98">0</div>
+                        <div class="text-gray-300 text-lg font-medium">🏆 Success %</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Programs Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 hero-title">
+                    Our 15 Excellence Programs
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Comprehensive programs designed to develop well-rounded individuals with academic excellence, Islamic values, and leadership skills.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- AI & Programming -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">💻</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">AI & Programming Club</h3>
+                    <p class="text-gray-300 mb-6">Learn coding, artificial intelligence, and software development with expert mentors and modern technology.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 150+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 5 National Awards</span>
+                    </div>
+                </div>
+                
+                <!-- Science & Research -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">🔬</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Science & Research</h3>
+                    <p class="text-gray-300 mb-6">Advanced laboratories and research programs with participation in national science Olympiads.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 200+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 3 Gold Medals</span>
+                    </div>
+                </div>
+                
+                <!-- Debate & Model UN -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">🎤</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Debate & Model UN</h3>
+                    <p class="text-gray-300 mb-6">Develop public speaking, critical thinking, and diplomatic skills through competitive debate and Model UN.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 120+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 8 Championships</span>
+                    </div>
+                </div>
+                
+                <!-- Entrepreneurship -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Entrepreneurship</h3>
+                    <p class="text-gray-300 mb-6">Start student businesses and learn startup fundamentals with mentorship from successful entrepreneurs.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 80+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 12 Startups</span>
+                    </div>
+                </div>
+                
+                <!-- AI Programming (Shergarh Campus) -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">💻</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">AI Programming Club</h3>
+                    <p class="text-gray-300 mb-6">Master coding, artificial intelligence, and software development with expert mentors and modern technology at Shergarh FCS Campus.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 150+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 SQCC & TQCC Certified</span>
+                    </div>
+                </div>
+                
+                <!-- Arts & Design -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Arts & Design</h3>
+                    <p class="text-gray-300 mb-6">Express creativity through visual arts, graphic design, and multimedia production with modern tools.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 100+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 15 Exhibitions</span>
+                    </div>
+                </div>
+                
+                <!-- Sports Excellence -->
+                <div class="card-hover glass rounded-2xl p-8">
+                    <div class="text-5xl mb-4">⚽</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Sports Excellence</h3>
+                    <p class="text-gray-300 mb-6">Cricket, football, badminton, and athletics teams with professional coaching and inter-school competitions.</p>
+                    <div class="flex items-center text-sm text-gray-400">
+                        <span>🎯 300+ Students</span>
+                        <span class="mx-2">•</span>
+                        <span>🏆 25 Trophies</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                    Explore All Programs →
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Campus Showcase -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 hero-title">
+                    Our 7 Campuses
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Strategically located across Malakand to provide quality education accessible to all communities.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Main Campus -->
+                <div class="card-hover glass rounded-2xl overflow-hidden">
+                    <img src="resources/hero-main-campus.jpg" alt="Main Campus" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Main Campus - Sakhakot</h3>
+                        <p class="text-gray-400 mb-4">📍 Sakhakot, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Our flagship campus with complete facilities and all programs. Home to 2000+ students and 80+ faculty members.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-400">
+                                <span>👥 2000+ Students</span>
+                            </div>
+                            <button class="text-yellow-400 hover:text-yellow-300 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Campus 2 -->
+                <div class="card-hover glass rounded-2xl overflow-hidden">
+                    <img src="resources/computer-lab.jpg" alt="Campus 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Campus 2 - Batkhela</h3>
+                        <p class="text-gray-400 mb-4">📍 Batkhela, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Modern facilities serving the local community with excellence in science and technology programs.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-400">
+                                <span>👥 800+ Students</span>
+                            </div>
+                            <button class="text-yellow-400 hover:text-yellow-300 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Campus 3 -->
+                <div class="card-hover glass rounded-2xl overflow-hidden">
+                    <img src="resources/science-lab.jpg" alt="Campus 3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Campus 3 - Dargai</h3>
+                        <p class="text-gray-400 mb-4">📍 Dargai, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Growing campus with dedicated staff and modern resources, specializing in arts and humanities.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-400">
+                                <span>👥 600+ Students</span>
+                            </div>
+                            <button class="text-yellow-400 hover:text-yellow-300 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                    View All Campuses →
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Achievement Highlights -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 hero-title">
+                    Achievements & Success Stories
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Our students consistently excel in national and international competitions, securing admissions to top universities worldwide.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="text-3xl">🥇</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-yellow-400">First Gold Medal in International Biology Olympiad</h3>
+                                <p class="text-gray-400">Abdul Raffay Paracha, Class of 2024</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Historic achievement at the 35th International Biology Olympiad in Philippines, marking Pakistan's first-ever gold medal in international science Olympiads.</p>
+                    </div>
+                    
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="text-3xl">🎓</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-yellow-400">University Admissions Success</h3>
+                                <p class="text-gray-400">2023-2024 Academic Year</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">95% of our graduates secured admission to top universities including LUMS, NUST, GIKI, and international institutions with scholarships.</p>
+                    </div>
+                    
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="text-3xl">🏆</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-yellow-400">National Debate Championship</h3>
+                                <p class="text-gray-400">Inter-School Competition 2024</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Our debate team won the national championship, defeating 50+ schools across Pakistan in the prestigious competition.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center">2024 Achievement Summary</h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">International Medals</span>
+                            <span class="text-2xl font-bold text-yellow-400">15</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">National Championships</span>
+                            <span class="text-2xl font-bold text-yellow-400">25</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">University Scholarships</span>
+                            <span class="text-2xl font-bold text-yellow-400">180</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Research Publications</span>
+                            <span class="text-2xl font-bold text-yellow-400">12</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Community Service Hours</span>
+                            <span class="text-2xl font-bold text-yellow-400">5000+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- News Ticker -->
+    <section class="py-12 bg-gradient-to-r from-blue-900 to-purple-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center space-x-4">
+                <div class="text-yellow-400 font-bold text-lg">📰 Latest News:</div>
+                <div class="flex-1 overflow-hidden">
+                    <div id="news-ticker" class="text-gray-300 text-lg whitespace-nowrap">
+                        🏆 Abdul Raffay Paracha wins Pakistan's first Gold Medal in International Biology Olympiad • 📚 New AI & Robotics Lab inaugurated at Main Campus • 🎓 95% university admission success rate for Class of 2024 • 🏅 National Debate Championship won by AIMS team • 💻 Programming Club develops award-winning mobile app
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass rounded-3xl p-12">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 hero-title">
+                    Ready to Join AIMS College?
+                </h2>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                    Take the first step towards excellence. Join thousands of successful students who have built their future with us.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                        Start Your Application →
+                    </button>
+                    <button class="btn-secondary px-8 py-4 rounded-full text-lg font-bold text-yellow-400 bg-transparent">
+                        Schedule a Visit 📅
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-3">
+                        <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-12 h-12 rounded-full">
+                        <span class="font-display text-2xl font-bold text-white">AIMS College</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Allama Iqbal Model School & College is committed to providing world-class education grounded in Islamic values and modern innovation.
+                    </p>
+                    <div class="flex space-x-4">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">📘</div>
+                        <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-pink-700 transition-colors">📸</div>
+                        <div class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-500 transition-colors">🐦</div>
+                        <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">▶️</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Quick Links</h3>
+                    <div class="space-y-2">
+                        <a href="#about" class="block text-gray-400 hover:text-yellow-400 transition-colors">About Us</a>
+                        <a href="academics.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Academics</a>
+                        <a href="admissions.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Admissions</a>
+                        <a href="contact.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Contact</a>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Our Campuses</h3>
+                    <div class="space-y-2">
+                        <a href="campuses.html#main" class="block text-gray-400 hover:text-yellow-400 transition-colors">Main Campus - Sakhakot</a>
+                        <a href="campuses.html#batkhela" class="block text-gray-400 hover:text-yellow-400 transition-colors">Batkhela Campus</a>
+                        <a href="campuses.html#dargai" class="block text-gray-400 hover:text-yellow-400 transition-colors">Dargai Campus</a>
+                        <a href="campuses.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">View All 7 Campuses</a>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p>📍 Main Campus, Sakhakot<br>Malakand District, KPK</p>
+                        <p>📞 +92 945 763441</p>
+                        <p>✉️ info@aimscsakhakot.edu.pk</p>
+                        <p>🌐 www.aimscsakhakot.edu.pk</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Allama Iqbal Model School & College. All rights reserved. | Designed with ❤️ for Excellence</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="main.js"></script>
+</body>
+</html>

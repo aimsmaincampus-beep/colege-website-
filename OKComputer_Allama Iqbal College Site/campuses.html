@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our 7 Campuses - Allama Iqbal Model School & College</title>
+    <meta name="description" content="Explore our 7 strategically located campuses across Malakand District, each offering world-class education and modern facilities.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-gold: #fbbf24;
+            --accent-cyan: #06b6d4;
+            --dark-navy: #0f172a;
+            --light-gray: #f1f5f9;
+            --text-gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Navigation */
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(30, 58, 138, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        /* Cards */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(251, 191, 36, 0.3);
+            border-color: var(--secondary-gold);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.6);
+        }
+        
+        .btn-secondary {
+            border: 2px solid var(--secondary-gold);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        /* Map Styles */
+        #campus-map {
+            height: 500px;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .leaflet-popup-content-wrapper {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            border-radius: 0.5rem;
+        }
+        
+        .leaflet-popup-content {
+            margin: 1rem;
+        }
+        
+        /* Filter Styles */
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: var(--secondary-gold);
+            color: var(--dark-navy);
+        }
+        
+        /* Comparison Tool */
+        .comparison-table {
+            overflow-x: auto;
+        }
+        
+        .comparison-table table {
+            min-width: 800px;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            #campus-map {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-10 h-10 rounded-full">
+                    <span class="font-display text-xl font-bold text-white">AIMS College</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                    <a href="campuses.html" class="nav-link text-yellow-400 font-medium">Campuses</a>
+                    <a href="academics.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                    <a href="student-life.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Student Life</a>
+                    <a href="achievements.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Achievements</a>
+                    <a href="contact.html" class="nav-link text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                    <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold">Student Portal</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-16 right-0 w-64 h-screen bg-gray-900 md:hidden">
+            <div class="p-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Home</a>
+                <a href="campuses.html" class="block text-yellow-400 font-medium">Campuses</a>
+                <a href="academics.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Academics</a>
+                <a href="student-life.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Student Life</a>
+                <a href="achievements.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Achievements</a>
+                <a href="contact.html" class="block text-gray-300 hover:text-yellow-400 font-medium">Contact</a>
+                <button class="btn-primary text-gray-900 px-6 py-2 rounded-full font-bold w-full mt-4">Student Portal</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="font-display text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
+                Our 8 Campuses
+            </h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+                Strategically located across Malakand District, each campus offers world-class education with modern facilities and dedicated faculty.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button class="btn-primary px-6 py-3 rounded-full font-bold">Take Virtual Tour</button>
+                <button class="btn-secondary px-6 py-3 rounded-full font-bold text-yellow-400 bg-transparent">Compare Campuses</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive Map -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-4 text-yellow-400">Campus Locations</h2>
+                <p class="text-gray-400 text-lg">Click on markers to explore each campus</p>
+            </div>
+            
+            <div class="glass rounded-2xl p-6">
+                <div id="campus-map"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Campus Filter -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-4 text-yellow-400">Explore Our Campuses</h2>
+                <p class="text-gray-400 text-lg">Filter and compare our educational facilities</p>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active px-6 py-3 rounded-full bg-gray-700 text-white font-medium" data-filter="all">
+                    All Campuses
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-gray-700 text-white font-medium" data-filter="science">
+                    Science Programs
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-gray-700 text-white font-medium" data-filter="arts">
+                    Arts Programs
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-gray-700 text-white font-medium" data-filter="technology">
+                    Technology Programs
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full bg-gray-700 text-white font-medium" data-filter="sports">
+                    Sports Facilities
+                </button>
+            </div>
+            
+            <!-- Campus Grid -->
+            <div id="campus-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Main Campus -->
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="science arts technology sports">
+                    <img src="assets/images/principal-main.jpg" alt="Main Campus Principal" class="w-full h-48 object-cover object-top">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Main Campus - Sakhakot</h3>
+                        <p class="text-gray-400 mb-4">📍 Sakhakot, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Our flagship campus with complete facilities and all programs. Home to 2000+ students and 80+ faculty members.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">2000+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">80+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">1995</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">Science</span>
+                            <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">Arts</span>
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Technology</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Batkhela Campus -->
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="science technology sports">
+                    <img src="resources/computer-lab.jpg" alt="Batkhela Campus" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Batkhela Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Batkhela, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Modern facilities serving the local community with excellence in science and technology programs.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">800+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">35+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">2005</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">Science</span>
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Technology</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dargai Campus -->
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="arts technology sports">
+                    <img src="resources/science-lab.jpg" alt="Dargai Campus" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Dargai Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Dargai, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Growing campus with dedicated staff and modern resources, specializing in arts and humanities.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">600+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">28+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">2010</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">Arts</span>
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Technology</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shergarh FCS Campus - Real Data -->
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="science arts technology sports">
+                    <img src="resources/shergarh-campus.jpg" alt="Shergarh FCS Campus" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Shergarh FCS Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Shergarh Main Malakand Road near Allied CNG</p>
+                        <p class="text-gray-300 mb-6">Outstanding buildings with comprehensive accommodation facilities and full range of amenities expected of a model institution.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">575</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">51</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">2009</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Pass Rate:</span>
+                                <span class="text-yellow-400 font-bold">98%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">Science</span>
+                            <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">Arts</span>
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Technology</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="technology sports">
+                    <img src="resources/sports-facility.jpg" alt="Campus 5" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Palai Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Palai, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Modern campus with excellent sports facilities and technology integration in education.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">400+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">22+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">2012</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Technology</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="arts sports">
+                    <img src="resources/students-group.jpg" alt="Campus 6" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Thana Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Thana, Malakand District</p>
+                        <p class="text-gray-300 mb-6">Community-focused campus with strong emphasis on arts, culture, and extracurricular activities.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">350+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">20+</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Established:</span>
+                                <span class="text-yellow-400 font-bold">2015</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-purple-600 text-white text-sm rounded-full">Arts</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hall Mark Campus - Real Data -->
+                <div class="campus-card card-hover glass rounded-2xl overflow-hidden" data-category="science library sports">
+                    <img src="resources/computer-lab.jpg" alt="Hall Mark Campus" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Hall Mark Campus</h3>
+                        <p class="text-gray-400 mb-4">📍 Main Sakhakot Bazar, Malakand</p>
+                        <p class="text-gray-300 mb-6">A premier campus located in the heart of Sakhakot, providing quality education with excellent facilities.</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Students:</span>
+                                <span class="text-yellow-400 font-bold">383</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Faculty:</span>
+                                <span class="text-yellow-400 font-bold">14</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Principal:</span>
+                                <span class="text-yellow-400 font-bold">Ms. Sanam Ara</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">Science</span>
+                            <span class="px-3 py-1 bg-green-600 text-white text-sm rounded-full">Library</span>
+                            <span class="px-3 py-1 bg-red-600 text-white text-sm rounded-full">Sports</span>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn-primary px-4 py-2 rounded-full text-sm font-bold flex-1">Virtual Tour</button>
+                            <button class="btn-secondary px-4 py-2 rounded-full text-sm font-bold flex-1">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Campus Comparison Tool -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl font-bold mb-4 text-yellow-400">Compare Our Campuses</h2>
+                <p class="text-gray-400 text-lg">Side-by-side comparison of facilities, programs, and achievements</p>
+            </div>
+            
+            <div class="glass rounded-2xl p-8 overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="pb-4 text-yellow-400 font-bold">Feature</th>
+                            <th class="pb-4 text-center text-yellow-400 font-bold">Main Campus</th>
+                            <th class="pb-4 text-center text-yellow-400 font-bold">Batkhela</th>
+                            <th class="pb-4 text-center text-yellow-400 font-bold">Dargai</th>
+                            <th class="pb-4 text-center text-yellow-400 font-bold">Others</th>
+                        </tr>
+                    </thead>
+                    <tbody class="space-y-4">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Students</td>
+                            <td class="py-4 text-center text-white font-bold">2000+</td>
+                            <td class="py-4 text-center text-white font-bold">800+</td>
+                            <td class="py-4 text-center text-white font-bold">600+</td>
+                            <td class="py-4 text-center text-white font-bold">400+</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Faculty</td>
+                            <td class="py-4 text-center text-white font-bold">80+</td>
+                            <td class="py-4 text-center text-white font-bold">35+</td>
+                            <td class="py-4 text-center text-white font-bold">28+</td>
+                            <td class="py-4 text-center text-white font-bold">25+</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Science Labs</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-yellow-400">Basic</td>
+                            <td class="py-4 text-center text-yellow-400">Basic</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Computer Labs</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-yellow-400">Limited</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Library</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 text-gray-300">Sports Facilities</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-yellow-400">Basic</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 text-gray-300">Transport</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-green-400">✓</td>
+                            <td class="py-4 text-center text-yellow-400">Limited</td>
+                            <td class="py-4 text-center text-yellow-400">Limited</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass rounded-3xl p-12">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
+                    Choose Your Campus
+                </h2>
+                <p class="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                    Each campus offers unique opportunities for growth and excellence. Find the one that's perfect for you.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <button class="btn-primary px-8 py-4 rounded-full text-lg font-bold text-gray-900">
+                        Schedule Campus Visit →
+                    </button>
+                    <button class="btn-secondary px-8 py-4 rounded-full text-lg font-bold text-yellow-400 bg-transparent">
+                        Contact Admissions 📞
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-3">
+                        <img src="assets/images/logo-full.jpg" alt="AIMS Logo" class="w-12 h-12 rounded-full">
+                        <span class="font-display text-2xl font-bold text-white">AIMS College</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Allama Iqbal Model School & College is committed to providing world-class education grounded in Islamic values and modern innovation.
+                    </p>
+                    <div class="flex space-x-4">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">📘</div>
+                        <div class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-pink-700 transition-colors">📸</div>
+                        <div class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-500 transition-colors">🐦</div>
+                        <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">▶️</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Quick Links</h3>
+                    <div class="space-y-2">
+                        <a href="index.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Home</a>
+                        <a href="academics.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Academics</a>
+                        <a href="admissions.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Admissions</a>
+                        <a href="contact.html" class="block text-gray-400 hover:text-yellow-400 transition-colors">Contact</a>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Our Campuses</h3>
+                    <div class="space-y-2">
+                        <a href="#sakhakot" class="block text-gray-400 hover:text-yellow-400 transition-colors">Main Campus - Sakhakot</a>
+                        <a href="#batkhela" class="block text-gray-400 hover:text-yellow-400 transition-colors">Batkhela Campus</a>
+                        <a href="#dargai" class="block text-gray-400 hover:text-yellow-400 transition-colors">Dargai Campus</a>
+                        <a href="#all" class="block text-gray-400 hover:text-yellow-400 transition-colors">View All 7 Campuses</a>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p>📍 Main Campus, Sakhakot<br>Malakand District, KPK</p>
+                        <p>📞 +92 945 763441</p>
+                        <p>✉️ info@aimscsakhakot.edu.pk</p>
+                        <p>🌐 www.aimscsakhakot.edu.pk</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Allama Iqbal Model School & College. All rights reserved. | Designed with ❤️ for Excellence</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Campus page specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map
+            const map = L.map('campus-map').setView([34.5000, 71.5000], 10);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Campus locations
+            const campuses = [
+                { name: 'Main Campus - Sakhakot', lat: 34.6000, lng: 71.5000, students: '2000+' },
+                { name: 'Batkhela Campus', lat: 34.4000, lng: 71.6000, students: '800+' },
+                { name: 'Dargai Campus', lat: 34.3000, lng: 71.7000, students: '600+' },
+                { name: 'Kot Campus', lat: 34.7000, lng: 71.4000, students: '500+' },
+                { name: 'Palai Campus', lat: 34.2000, lng: 71.8000, students: '400+' },
+                { name: 'Thana Campus', lat: 34.8000, lng: 71.3000, students: '350+' },
+                { name: 'Batkhela Girls Campus', lat: 34.4500, lng: 71.6500, students: '300+' },
+                { name: 'Hall Mark Campus', lat: 34.6050, lng: 71.5050, students: '383' }
+            ];
+            
+            // Add markers
+            campuses.forEach(campus => {
+                const marker = L.marker([campus.lat, campus.lng]).addTo(map);
+                marker.bindPopup(`
+                    <div class="text-center">
+                        <h3 class="font-bold text-lg mb-2">${campus.name}</h3>
+                        <p class="text-gray-300 mb-2">Students: ${campus.students}</p>
+                        <button class="bg-yellow-500 text-gray-900 px-4 py-2 rounded-full text-sm font-bold hover:bg-yellow-400 transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                `);
+            });
+            
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const campusCards = document.querySelectorAll('.campus-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    campusCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+                            card.style.display = 'block';
+                            anime({
+                                targets: card,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                duration: 500,
+                                easing: 'easeOutCubic'
+                            });
+                        } else {
+                            anime({
+                                targets: card,
+                                opacity: [1, 0],
+                                translateY: [0, -20],
+                                duration: 300,
+                                easing: 'easeInCubic',
+                                complete: () => {
+                                    card.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            
+            // Campus card interactions
+            document.querySelectorAll('.campus-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const campusName = this.querySelector('h3').textContent;
+                    showCampusModal(campusName);
+                });
+            });
+            
+            // Modal function
+            function showCampusModal(campusName) {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+                modal.innerHTML = `
+                    <div class="glass rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-3xl font-bold text-yellow-400">${campusName}</h3>
+                            <button class="close-modal text-gray-400 hover:text-white text-3xl">&times;</button>
+                        </div>
+                        <div class="space-y-6 text-gray-300">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <h4 class="text-xl font-bold text-yellow-400">Campus Features</h4>
+                                    <ul class="space-y-2">
+                                        <li>✓ Modern classrooms with smart boards</li>
+                                        <li>✓ Science laboratories with latest equipment</li>
+                                        <li>✓ Computer lab with 40+ workstations</li>
+                                        <li>✓ Library with 5000+ books</li>
+                                        <li>✓ Sports facilities and playground</li>
+                                        <li>✓ Mosque and prayer areas</li>
+                                    </ul>
+                                </div>
+                                <div class="space-y-4">
+                                    <h4 class="text-xl font-bold text-yellow-400">Programs Offered</h4>
+                                    <ul class="space-y-2">
+                                        <li>• Science (Pre-Medical, Pre-Engineering)</li>
+                                        <li>• Arts and Humanities</li>
+                                        <li>• Computer Science</li>
+                                        <li>• Commerce and Business</li>
+                                        <li>• Islamic Studies</li>
+                                        <li>• Extracurricular Activities</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex space-x-4 mt-8">
+                                <button class="btn-primary px-6 py-3 rounded-full font-bold flex-1">Take Virtual Tour</button>
+                                <button class="btn-secondary px-6 py-3 rounded-full font-bold flex-1">Contact Campus</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                modal.querySelector('.close-modal').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            }
+            
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('active');
+                });
+                
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+            }
+            
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            translateY: [50, 0],
+                            opacity: [0, 1],
+                            duration: 800,
+                            easing: 'easeOutCubic'
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.campus-card, .glass').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+    
+    <script src="main.js"></script>
+</body>
+</html>
