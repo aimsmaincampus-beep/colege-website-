@@ -1,0 +1,11 @@
+{
+    "name": "aims-college-website",
+    "version": "1.0.0",
+    "description": "Allama Iqbal Model School & College Website",
+    "scripts": {
+        "build": "echo 'Static site build complete - Ready to serve'"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
